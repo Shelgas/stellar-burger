@@ -15,11 +15,18 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { ProtectedRoute } from '../protected-route';
+import { useEffect } from 'react';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'src/services/store';
 
 const App = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
-  console.log(process.env.BURGER_API_URL);
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -123,3 +130,6 @@ const App = () => {
 };
 
 export default App;
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}

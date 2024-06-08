@@ -26,6 +26,16 @@ const burgerConstructorSlice = createSlice({
     addBurgerIngredient: (state, action) => {
       if (action.payload.type === 'bun') state.bun = action.payload;
       else state.ingredients.push(action.payload);
+    },
+    moveBurgerIngredient: (state, action) => {
+      const { index, step } = action.payload;
+      [state.ingredients[index], state.ingredients[index + step]] = [
+        state.ingredients[index + step],
+        state.ingredients[index]
+      ];
+    },
+    removeBurgerIngredient: (state, action) => {
+      state.ingredients.splice(action.payload, 1);
     }
   },
   selectors: {
@@ -33,7 +43,11 @@ const burgerConstructorSlice = createSlice({
   }
 });
 
-export const { addBurgerIngredient } = burgerConstructorSlice.actions;
+export const {
+  addBurgerIngredient,
+  moveBurgerIngredient,
+  removeBurgerIngredient
+} = burgerConstructorSlice.actions;
 
 export const { selectBurgerIngredients } = burgerConstructorSlice.selectors;
 export const burgerConstructorReducer = burgerConstructorSlice.reducer;

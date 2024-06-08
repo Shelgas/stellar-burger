@@ -1,19 +1,5 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  current,
-  PayloadAction,
-  nanoid
-} from '@reduxjs/toolkit';
-import { TIngredient, TOrder, TConstructorIngredient } from '@utils-types';
-
-import {
-  getIngredientsApi,
-  getFeedsApi,
-  getOrdersApi,
-  orderBurgerApi,
-  getOrderByNumberApi
-} from '../../utils/burger-api';
+import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
+import { TIngredient, TConstructorIngredient } from '@utils-types';
 
 interface IBurgerConstructorState {
   bun: TConstructorIngredient | null;
@@ -47,7 +33,8 @@ const burgerConstructorSlice = createSlice({
     },
     removeBurgerIngredient: (state, action) => {
       state.ingredients.splice(action.payload, 1);
-    }
+    },
+    resetBurgerIngredient: (state) => (state = initialState)
   },
   selectors: {
     selectBurgerIngredients: (state) => state
@@ -57,7 +44,8 @@ const burgerConstructorSlice = createSlice({
 export const {
   addBurgerIngredient,
   moveBurgerIngredient,
-  removeBurgerIngredient
+  removeBurgerIngredient,
+  resetBurgerIngredient
 } = burgerConstructorSlice.actions;
 
 export const { selectBurgerIngredients } = burgerConstructorSlice.selectors;

@@ -7,7 +7,7 @@ import {
   selectBurgerIngredients
 } from '../../services/slices/burgerConstructorSlice';
 import {
-  createOrtder,
+  createOrder,
   selectOrderModalData,
   selectOrderRequest,
   closeOrderModal as closeModal
@@ -24,7 +24,7 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     dispatch(
-      createOrtder([
+      createOrder([
         ...constructorItems.ingredients.map((item) => item._id),
         constructorItems.bun._id
       ])

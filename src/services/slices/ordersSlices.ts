@@ -24,7 +24,7 @@ export const getOrders = createAsyncThunk(
   async () => await getOrdersApi()
 );
 
-export const createOrtder = createAsyncThunk(
+export const createOrder = createAsyncThunk(
   'order/createOrder',
   async (data: string[]) => await orderBurgerApi(data)
 );
@@ -44,16 +44,17 @@ export const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createOrtder.fulfilled, (state, action) => {
+      .addCase(createOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
       })
-      .addCase(createOrtder.rejected, (state, action) => {
+      .addCase(createOrder.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(createOrtder.pending, (state) => {
+      .addCase(createOrder.pending, (state) => {
         state.orderRequest = true;
-      })
+      });
+    builder
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
         state.isLoading = false;

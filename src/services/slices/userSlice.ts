@@ -6,8 +6,10 @@ import {
   TRegisterData,
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi
 } from '@api';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 export interface TUserState {
   user: TUser;
@@ -40,13 +42,19 @@ export const registerUser = createAsyncThunk(
   async (data: TRegisterData) => await registerUserApi(data)
 );
 
+export const logoutUser = createAsyncThunk(
+  'user/logoutUser',
+  async () => await logoutApi()
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
   selectors: {
-    selectUser: (state) => state,
-    selectIsAuth: (state) => state.isAuth
+    selectUser: (state) => state.user,
+    selectIsAuth: (state) => state.isAuth,
+    selectError: (state) => state.error
   },
   extraReducers: (builder) => {
     builder
@@ -82,12 +90,18 @@ const userSlice = createSlice({
         state.isAuth = false;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+        setCookie('accessToken', action.payload.accessToken);
         state.user = action.payload.user;
         state.isAuth = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
       });
   }
 });
 
-export const { selectIsAuth, selectUser } = userSlice.selectors;
+export const { selectIsAuth, selectUser, selectError } = userSlice.selectors;
 
 export const userReducer = userSlice.reducer;

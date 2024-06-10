@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, useLocation } from 'react-router-dom';
 import { selectIsAuth } from '../../services/slices/userSlice';
+import { getCookie } from '../../utils/cookie';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -12,12 +13,8 @@ export const ProtectedRoute = ({
   onlyUnAuth,
   children
 }: ProtectedRouteProps) => {
-  const isAuth = useSelector(selectIsAuth);
+  const isAuth = getCookie('accessToken');
   const location = useLocation();
-
-  if (onlyUnAuth && isAuth) {
-    return <Route>{children}</Route>;
-  }
 
   if (!onlyUnAuth && !isAuth) {
     return <Navigate replace to='/login' state={{ from: location }} />;

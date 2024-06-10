@@ -18,7 +18,9 @@ import { ProtectedRoute } from '../protected-route';
 import { useEffect } from 'react';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'src/services/store';
+import { AppDispatch } from '../../services/store';
+import { getCookie } from '../../utils/cookie';
+import { getUser } from '../../services/slices/userSlice';
 
 const App = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+    if (getCookie('accessToken')) dispatch(getUser());
   }, []);
 
   return (

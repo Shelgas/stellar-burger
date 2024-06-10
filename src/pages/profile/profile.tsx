@@ -2,7 +2,11 @@ import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../services/store';
-import { getUser, selectUser } from '../../services/slices/userSlice';
+import {
+  getUser,
+  selectUser,
+  updateUserProfile
+} from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
 
 export const Profile: FC = () => {
@@ -30,6 +34,7 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    dispatch(updateUserProfile(formValue));
   };
 
   const handleCancel = (e: SyntheticEvent) => {

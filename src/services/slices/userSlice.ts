@@ -7,7 +7,8 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
-  registerUserApi
+  registerUserApi,
+  updateUserApi
 } from '@api';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
@@ -45,6 +46,11 @@ export const registerUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async () => await logoutApi()
+);
+
+export const updateUserProfile = createAsyncThunk(
+  'user/updateUserProfile',
+  async (data: Partial<TRegisterData>) => await updateUserApi(data)
 );
 
 const userSlice = createSlice({
@@ -95,11 +101,23 @@ const userSlice = createSlice({
         setCookie('accessToken', action.payload.accessToken);
         state.user = action.payload.user;
         state.isAuth = true;
+      });
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      localStorage.removeItem('refreshToken');
+      state.user.name = '';
+      deleteCookie('accessToken');
+    });
+    builder
+      .addCase(updateUserProfile.pending, (state) => {
+        state.error = null;
+        state.isLoading = true;
       })
-      .addCase(logoutUser.fulfilled, (state) => {
-        localStorage.removeItem('refreshToken');
-        state.user.name = '';
-        deleteCookie('accessToken');
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.error = action.error?.message;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isLoading = false;
       });
   }
 });

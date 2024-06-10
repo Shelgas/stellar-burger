@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const orderId = Number(useParams().number);
+  const orderId = Number(useParams().id);
   const orderData = useSelector(selectOrderModalData);
   const ingredients: TIngredient[] = useSelector(selectIngredients);
 

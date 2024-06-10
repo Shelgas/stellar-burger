@@ -112,7 +112,7 @@ const App = () => {
           }
         />
         <Route
-          path='/profile/orders/:number'
+          path='/profile/orders/:id'
           element={
             <ProtectedRoute>
               <Modal

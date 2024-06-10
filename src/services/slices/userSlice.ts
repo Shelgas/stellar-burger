@@ -54,7 +54,8 @@ const userSlice = createSlice({
   selectors: {
     selectUser: (state) => state.user,
     selectIsAuth: (state) => state.isAuth,
-    selectError: (state) => state.error
+    selectError: (state) => state.error,
+    selectUserName: (state) => state.user.name
   },
   extraReducers: (builder) => {
     builder
@@ -97,11 +98,13 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         localStorage.removeItem('refreshToken');
+        state.user.name = '';
         deleteCookie('accessToken');
       });
   }
 });
 
-export const { selectIsAuth, selectUser, selectError } = userSlice.selectors;
+export const { selectIsAuth, selectUser, selectError, selectUserName } =
+  userSlice.selectors;
 
 export const userReducer = userSlice.reducer;

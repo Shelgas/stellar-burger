@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { TOrder } from '@utils-types';
 
-import { getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '@api';
 
 export interface TOrdersState {
   orders: Array<TOrder>;
@@ -10,13 +15,15 @@ export interface TOrdersState {
   orderRequest: boolean;
   orderModalData: TOrder | null;
   error?: string | null;
+  totalToday: number;
 }
 
 const initialState: TOrdersState = {
   orders: [],
   isLoading: true,
   orderRequest: false,
-  orderModalData: null
+  orderModalData: null,
+  totalToday: 0
 };
 
 export const getOrders = createAsyncThunk(
@@ -25,8 +32,13 @@ export const getOrders = createAsyncThunk(
 );
 
 export const createOrder = createAsyncThunk(
-  'order/createOrder',
+  'orders/createOrder',
   async (data: string[]) => await orderBurgerApi(data)
+);
+
+export const getOrderById = createAsyncThunk(
+  'orders/getOrderById',
+  async (id: number) => await getOrderByNumberApi(id)
 );
 
 export const orderSlice = createSlice({
@@ -39,6 +51,7 @@ export const orderSlice = createSlice({
     }
   },
   selectors: {
+    selectOrders: (state) => state.orders,
     selectOrderRequest: (state) => state.orderRequest,
     selectOrderModalData: (state) => state.orderModalData
   },
@@ -65,10 +78,21 @@ export const orderSlice = createSlice({
       .addCase(getOrders.rejected, (state) => {
         state.isLoading = false;
       });
+    builder
+      .addCase(getOrderById.pending, (state) => {
+        state.orderModalData = null;
+        state.error = null;
+      })
+      .addCase(getOrderById.rejected, (state, action) => {
+        state.error = action.error?.message;
+      })
+      .addCase(getOrderById.fulfilled, (state, action) => {
+        state.orderModalData = action.payload.orders[0];
+      });
   }
 });
 
-export const { selectOrderRequest, selectOrderModalData } =
+export const { selectOrderRequest, selectOrderModalData, selectOrders } =
   orderSlice.selectors;
 
 export const { closeOrderModal } = orderSlice.actions;

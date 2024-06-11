@@ -1,8 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, useLocation } from 'react-router-dom';
-import { selectIsAuth } from '../../services/slices/userSlice';
+import {
+  selectIsAuth,
+  selectIsAuthChecked
+} from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
+import { Preloader } from '../ui/preloader';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -10,11 +14,16 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({
-  onlyUnAuth,
+  onlyUnAuth = false,
   children
 }: ProtectedRouteProps) => {
   const isAuth = getCookie('accessToken');
+  const isAuthChecked = useSelector(selectIsAuthChecked);
   const location = useLocation();
+
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
 
   if (!onlyUnAuth && !isAuth) {
     return <Navigate replace to='/login' state={{ from: location }} />;

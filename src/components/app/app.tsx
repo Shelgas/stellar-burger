@@ -29,7 +29,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
-    if (getCookie('accessToken')) dispatch(getUser());
+    dispatch(getUser());
   }, []);
 
   return (
@@ -135,6 +135,3 @@ const App = () => {
 };
 
 export default App;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../services/store';
 import { getCookie } from '../../utils/cookie';
 import { getUser } from '../../services/slices/userSlice';
+import { closeOrderModal } from '../../services/slices/ordersSlices';
 
 const App = () => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const App = () => {
           path='/ingredients/:id'
           element={
             <Modal
-              title='Детали ингредиента'
+              title='Детали заказа'
               onClose={() => {
                 navigate(-1);
               }}
@@ -118,6 +119,7 @@ const App = () => {
               <Modal
                 title='Детали заказа'
                 onClose={() => {
+                  dispatch(closeOrderModal());
                   navigate(-1);
                 }}
               >

@@ -13,14 +13,18 @@ import {
   closeOrderModal as closeModal
 } from '../../services/slices/ordersSlices';
 import { AppDispatch } from '../../services/store';
+import { getCookie } from '../../utils/cookie';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(selectBurgerIngredients);
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderModalData);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const onOrderClick = () => {
+    if (!getCookie('accessToken')) return navigate('/login');
     if (!constructorItems.bun || orderRequest) return;
     dispatch(
       createOrder([

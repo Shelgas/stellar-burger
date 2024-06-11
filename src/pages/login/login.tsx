@@ -12,7 +12,7 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const error = useSelector(selectError);
   const location = useLocation();
-  const path = location.state ? location.state.from.pathname : '/profile';
+  const path = location.state ? location.state.from.pathname : '/';
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();

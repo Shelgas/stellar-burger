@@ -90,8 +90,9 @@ const App = () => {
           path='/feed/:id'
           element={
             <Modal
-              title='Детали ингредиента'
+              title='Детали заказа'
               onClose={() => {
+                dispatch(closeOrderModal());
                 navigate(-1);
               }}
             >
@@ -103,7 +104,7 @@ const App = () => {
           path='/ingredients/:id'
           element={
             <Modal
-              title='Детали заказа'
+              title='Детали ингредиента'
               onClose={() => {
                 navigate(-1);
               }}
